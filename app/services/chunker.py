@@ -87,9 +87,7 @@ class TranscriptChunk:
         Returns:
             Multi-line string with one segment per line.
         """
-        return "\n".join(
-            f"[{seg.start:.1f}s - {seg.end:.1f}s] {seg.text}" for seg in self.segments
-        )
+        return "\n".join(f"[{seg.start:.1f}s - {seg.end:.1f}s] {seg.text}" for seg in self.segments)
 
     def time_label(self) -> str:
         """Return a compact time range label for logging, e.g. '0m00s - 15m45s'."""
@@ -130,8 +128,7 @@ class TranscriptChunker:
         num_chunks = max(1, math.ceil(total_duration / config.chunk_duration_s))
 
         logger.info(
-            "Splitting %.0f min transcript → %d chunks "
-            "(~%.0f min each, %.0fs overlap)",
+            "Splitting %.0f min transcript → %d chunks (~%.0f min each, %.0fs overlap)",
             total_duration / 60,
             num_chunks,
             config.chunk_duration_s / 60,
@@ -149,9 +146,7 @@ class TranscriptChunker:
             )
 
             chunk_segments = [
-                seg
-                for seg in transcript.segments
-                if window_start <= seg.start < window_end
+                seg for seg in transcript.segments if window_start <= seg.start < window_end
             ]
 
             if not chunk_segments:

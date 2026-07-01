@@ -117,9 +117,7 @@ class VideoCutter:
             output_path = output_dir / f"{label}.mp4"
 
             if output_path.exists():
-                logger.info(
-                    "  [%d/%d] %s already exists, skipping.", idx, total, label
-                )
+                logger.info("  [%d/%d] %s already exists, skipping.", idx, total, label)
                 successful.append(output_path)
                 continue
 
@@ -140,9 +138,7 @@ class VideoCutter:
             try:
                 self._run_ffmpeg(video_path, output_path, clip)
                 size_mb = _file_size_mb(output_path)
-                logger.info(
-                    "  [%d/%d] %s — done (%.1f MB)", idx, total, label, size_mb
-                )
+                logger.info("  [%d/%d] %s — done (%.1f MB)", idx, total, label, size_mb)
                 successful.append(output_path)
             except subprocess.CalledProcessError as exc:
                 logger.error(
@@ -156,9 +152,7 @@ class VideoCutter:
                 # Remove incomplete output file if it was partially written
                 output_path.unlink(missing_ok=True)
             except Exception as exc:
-                logger.error(
-                    "  [%d/%d] %s — unexpected error: %s", idx, total, label, exc
-                )
+                logger.error("  [%d/%d] %s — unexpected error: %s", idx, total, label, exc)
                 output_path.unlink(missing_ok=True)
 
         logger.info(
@@ -187,8 +181,7 @@ class VideoCutter:
         """
         if not math.isfinite(clip.start_time) or not math.isfinite(clip.end_time):
             logger.warning(
-                "  [%d/%d] Skipping '%s' — non-finite timestamp(s): "
-                "start=%.2f end=%.2f",
+                "  [%d/%d] Skipping '%s' — non-finite timestamp(s): start=%.2f end=%.2f",
                 idx,
                 total,
                 clip.title,
@@ -234,14 +227,21 @@ class VideoCutter:
         """
         cmd = [
             self._ffmpeg_bin,
-            "-y",                               # overwrite output without prompt
-            "-ss", str(clip.start_time),        # fast input seek (keyframe-aligned)
-            "-i", str(input_path),              # source video
-            "-t", str(clip.duration),           # duration relative to seek position
-            "-c:v", "copy",                     # copy video stream — no re-encode
-            "-c:a", "copy",                     # copy audio stream — no re-encode
-            "-avoid_negative_ts", "make_zero",  # fix timestamps after seeking
-            "-movflags", "+faststart",          # move moov atom to front (MP4 best practice)
+            "-y",  # overwrite output without prompt
+            "-ss",
+            str(clip.start_time),  # fast input seek (keyframe-aligned)
+            "-i",
+            str(input_path),  # source video
+            "-t",
+            str(clip.duration),  # duration relative to seek position
+            "-c:v",
+            "copy",  # copy video stream — no re-encode
+            "-c:a",
+            "copy",  # copy audio stream — no re-encode
+            "-avoid_negative_ts",
+            "make_zero",  # fix timestamps after seeking
+            "-movflags",
+            "+faststart",  # move moov atom to front (MP4 best practice)
             str(output_path),
         ]
 

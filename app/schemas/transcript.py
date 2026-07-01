@@ -35,9 +35,7 @@ class TranscriptSegment(BaseModel):
         """Ensure the segment end time is after its start time."""
         start = info.data.get("start")
         if start is not None and end <= start:
-            raise ValueError(
-                f"Segment end ({end:.2f}s) must be greater than start ({start:.2f}s)"
-            )
+            raise ValueError(f"Segment end ({end:.2f}s) must be greater than start ({start:.2f}s)")
         return end
 
     def duration(self) -> float:
@@ -97,10 +95,7 @@ class Transcript(BaseModel):
             [00:00.0 - 00:05.3] Hello and welcome to the podcast.
             [00:05.3 - 00:12.1] Today we are talking about AI.
         """
-        lines = [
-            f"{seg.formatted_timestamp()} {seg.text}"
-            for seg in self.segments
-        ]
+        lines = [f"{seg.formatted_timestamp()} {seg.text}" for seg in self.segments]
         return "\n".join(lines)
 
     @property

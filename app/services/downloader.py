@@ -88,7 +88,9 @@ class AudioDownloader:
                 "Ensure FFmpeg is installed and available in your PATH."
             )
 
-        logger.info("Audio downloaded successfully: %s (%.1f MB)", audio_file, _file_size_mb(audio_file))
+        logger.info(
+            "Audio downloaded successfully: %s (%.1f MB)", audio_file, _file_size_mb(audio_file)
+        )
         return audio_file
 
     def _build_ydl_options(self, output_dir: Path, video_id: str) -> dict:

@@ -193,6 +193,7 @@ def _format_candidates(candidates: list[ViralClip]) -> str:
 
 # ── Shared formatting helpers ──────────────────────────────────────────────────
 
+
 def _fmt_duration(total_seconds: float) -> str:
     """Convert seconds to a human-readable duration string."""
     total = int(total_seconds)

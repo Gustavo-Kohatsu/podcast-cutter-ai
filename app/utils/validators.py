@@ -11,17 +11,17 @@ Supports all common YouTube URL formats:
 import re
 from urllib.parse import parse_qs, urlparse
 
-_YOUTUBE_DOMAINS = frozenset({
-    "youtube.com",
-    "www.youtube.com",
-    "m.youtube.com",
-    "youtu.be",
-    "www.youtu.be",
-})
-
-_VIDEO_ID_PATTERN = re.compile(
-    r"(?:v=|youtu\.be/|/live/|/shorts/|/embed/)([a-zA-Z0-9_-]{11})"
+_YOUTUBE_DOMAINS = frozenset(
+    {
+        "youtube.com",
+        "www.youtube.com",
+        "m.youtube.com",
+        "youtu.be",
+        "www.youtu.be",
+    }
 )
+
+_VIDEO_ID_PATTERN = re.compile(r"(?:v=|youtu\.be/|/live/|/shorts/|/embed/)([a-zA-Z0-9_-]{11})")
 
 
 def validate_youtube_url(url: str) -> None:
@@ -48,9 +48,7 @@ def validate_youtube_url(url: str) -> None:
     parsed = urlparse(url.strip())
 
     if parsed.scheme not in ("http", "https"):
-        raise ValueError(
-            f"URL must use http or https scheme, got: '{parsed.scheme}'"
-        )
+        raise ValueError(f"URL must use http or https scheme, got: '{parsed.scheme}'")
 
     if parsed.netloc not in _YOUTUBE_DOMAINS:
         raise ValueError(

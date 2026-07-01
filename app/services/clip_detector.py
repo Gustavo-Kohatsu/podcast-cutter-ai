@@ -80,12 +80,8 @@ class ClipDetector:
         """
         cached_path = self._settings.jobs_dir / f"{transcript.video_id}.json"
         if cached_path.exists():
-            logger.info(
-                "Job cache found, skipping detection — loading from: %s", cached_path
-            )
-            return ClipDetectionResult.model_validate_json(
-                cached_path.read_text(encoding="utf-8")
-            )
+            logger.info("Job cache found, skipping detection — loading from: %s", cached_path)
+            return ClipDetectionResult.model_validate_json(cached_path.read_text(encoding="utf-8"))
 
         self._verify_ollama_connection()
 
@@ -137,8 +133,7 @@ class ClipDetector:
             final_clips = self._rank_candidates(unique, transcript)
         else:
             logger.info(
-                "Phase 2 — Skipped (%d candidates ≤ max_clips=%d), "
-                "using Phase 1 results directly.",
+                "Phase 2 — Skipped (%d candidates ≤ max_clips=%d), using Phase 1 results directly.",
                 len(unique),
                 self._settings.max_clips,
             )
@@ -157,9 +152,7 @@ class ClipDetector:
 
     # ── Phase 1 ───────────────────────────────────────────────────────────────
 
-    def _extract_candidates(
-        self, chunk: TranscriptChunk, total_duration: float
-    ) -> list[ViralClip]:
+    def _extract_candidates(self, chunk: TranscriptChunk, total_duration: float) -> list[ViralClip]:
         """Send one chunk to Ollama and return the detected candidates.
 
         Failures are logged as warnings and return an empty list so the
@@ -197,9 +190,7 @@ class ClipDetector:
                 },
             )
         except Exception as exc:
-            logger.warning(
-                "  %s — LLM call failed, skipping: %s", chunk.label, exc
-            )
+            logger.warning("  %s — LLM call failed, skipping: %s", chunk.label, exc)
             return []
 
         elapsed = time.perf_counter() - step_start
@@ -253,9 +244,7 @@ class ClipDetector:
                 },
             )
         except Exception as exc:
-            logger.warning(
-                "  Phase 2 ranking failed (%s) — falling back to score sort.", exc
-            )
+            logger.warning("  Phase 2 ranking failed (%s) — falling back to score sort.", exc)
             return sorted(candidates, key=lambda c: c.viral_score, reverse=True)
 
         elapsed = time.perf_counter() - step_start
@@ -307,8 +296,12 @@ class ClipDetector:
 
         # Fix nested array structure: [[{...}], [{...}]] → [{...}, {...}]
         if raw_clips and isinstance(raw_clips[0], list):
-            raw_clips = [item for sublist in raw_clips for item in sublist if isinstance(item, dict)]
-            logger.warning("Fixed nested array structure in LLM response (%d clips recovered).", len(raw_clips))
+            raw_clips = [
+                item for sublist in raw_clips for item in sublist if isinstance(item, dict)
+            ]
+            logger.warning(
+                "Fixed nested array structure in LLM response (%d clips recovered).", len(raw_clips)
+            )
 
         valid: list[ViralClip] = []
         discarded = 0
@@ -406,8 +399,7 @@ class ClipDetector:
 
         if not valid and raw_clips:
             logger.warning(
-                "LLM returned %d clip(s) but ALL failed validation. "
-                "Raw response sample: %.300s",
+                "LLM returned %d clip(s) but ALL failed validation. Raw response sample: %.300s",
                 len(raw_clips),
                 json.dumps(raw_clips[:2]),
             )
@@ -535,9 +527,7 @@ class ClipDetector:
                     f"Pull it with: ollama pull {requested}"
                 )
 
-            logger.debug(
-                "Ollama connection verified. Model '%s' is available.", requested
-            )
+            logger.debug("Ollama connection verified. Model '%s' is available.", requested)
 
         except Exception as exc:
             if "connect" in str(exc).lower() or isinstance(exc, ConnectionError):
@@ -549,6 +539,7 @@ class ClipDetector:
 
 
 # ── Module-level helpers ──────────────────────────────────────────────────────
+
 
 def _overlap_ratio(a: ViralClip, b: ViralClip) -> float:
     """Calculate the overlap between two clips as a fraction of the shorter one.

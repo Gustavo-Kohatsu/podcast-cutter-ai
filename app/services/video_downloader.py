@@ -103,9 +103,7 @@ class VideoDownloader:
         )
         return video_file
 
-    def _build_ydl_options(
-        self, output_dir: Path, video_id: str, quality: int
-    ) -> dict:
+    def _build_ydl_options(self, output_dir: Path, video_id: str, quality: int) -> dict:
         """Build the yt-dlp options dictionary for video download.
 
         The format selector gives priority to MP4+M4A streams at or below the
