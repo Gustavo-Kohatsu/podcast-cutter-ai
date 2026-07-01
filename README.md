@@ -1,5 +1,7 @@
 # Podcast Cutter AI
 
+[![CI](https://github.com/seu-usuario/podcast-cutter-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/seu-usuario/podcast-cutter-ai/actions/workflows/ci.yml)
+
 Pipeline local para detecção e geração automática de cortes virais em podcasts e lives do YouTube.
 
 ## O que faz
@@ -223,7 +225,17 @@ ruff format app/ main.py
 
 # Rodar testes
 pytest
+
+# Rodar testes com cobertura
+pytest --cov=app --cov-report=term-missing
+
+# Gerar relatório HTML de cobertura (abre em browser)
+pytest --cov=app --cov-report=html
+open htmlcov/index.html   # macOS/Linux
+start htmlcov/index.html  # Windows
 ```
+
+O CI/CD roda automaticamente no GitHub Actions a cada push nas branches `main` e `develop`, executando lint e testes.
 
 ## Roadmap
 
