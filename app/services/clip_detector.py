@@ -432,6 +432,9 @@ class ClipDetector:
             A new ViralClip with updated ``start_time`` and ``end_time``.
         """
         target = float(self._settings.min_clip_duration)
+        if clip.duration >= target:
+            return clip
+
         center = (clip.start_time + clip.end_time) / 2.0
         half = target / 2.0
 
