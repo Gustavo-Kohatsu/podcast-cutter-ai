@@ -11,13 +11,14 @@ Examples:
 Exit codes:
     0 — Pipeline completed successfully.
     1 — Invalid arguments or URL.
-    2 — Pipeline failed (download, transcription, or LLM error).
+    2 — Pipeline failed (download, transcription, LLM error, etc.).
 """
 
 import sys
 
 from app.config.settings import Settings
-from app.core.pipeline import Pipeline
+from app.core.preflight import PreflightChecker
+from app.pipeline.orchestrator import create_default_pipeline
 from app.utils.logger import get_logger, setup_logging
 from app.utils.validators import validate_youtube_url
 
@@ -49,9 +50,14 @@ def main() -> None:
         logger.error("Invalid YouTube URL: %s", exc)
         sys.exit(1)
 
+    # Pre-flight: verify all external tools before starting any I/O-intensive work
+    checker = PreflightChecker(settings)
+    if not checker.run_all():
+        sys.exit(2)
+
     # Run pipeline
     try:
-        pipeline = Pipeline(settings)
+        pipeline = create_default_pipeline(settings)
         result_path = pipeline.run(url)
 
         print(f"\nDone! Results saved to: {result_path}")

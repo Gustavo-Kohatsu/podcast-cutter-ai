@@ -10,6 +10,9 @@ dependencies = [
     "pydantic>=2.10.0",
     "pydantic-settings>=2.7.0",
     "static-ffmpeg>=2.5",
+    # Smart crop — face detection for vertical 9:16 framing (Step 7).
+    # Requires Python 3.8-3.13. Brings opencv as a transitive dependency.
+    "mediapipe>=0.10.14",
 ]
 
 [dependency-groups]

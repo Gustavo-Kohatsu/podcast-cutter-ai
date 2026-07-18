@@ -67,6 +67,13 @@ class Settings(BaseSettings):
     max_clip_duration: int = 120
     max_clips: int = 10
 
+    # ── Renderer ──────────────────────────────────────────────────────────────
+    # H.264 CRF: 18 = near-lossless, 28 = smaller file. 23 is FFmpeg default.
+    render_crf: int = 23
+    # libx264 preset: ultrafast|superfast|veryfast|faster|fast|medium|slow|veryslow
+    # "fast" balances encode time vs. compression on a typical laptop CPU.
+    render_preset: str = "fast"
+
     # ── Storage ───────────────────────────────────────────────────────────────
     storage_dir: Path = Path("storage")
 
@@ -100,6 +107,16 @@ class Settings(BaseSettings):
     def cuts_dir(self) -> Path:
         """Directory where extracted clip video files are stored."""
         return self.storage_dir / "cuts"
+
+    @property
+    def subtitles_dir(self) -> Path:
+        """Directory where generated subtitle files (SRT/ASS) are stored."""
+        return self.storage_dir / "subtitles"
+
+    @property
+    def rendered_dir(self) -> Path:
+        """Directory where final rendered vertical MP4 files are stored."""
+        return self.storage_dir / "rendered"
 
     # ── Validators ────────────────────────────────────────────────────────────
 

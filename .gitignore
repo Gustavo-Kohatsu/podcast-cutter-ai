@@ -33,6 +33,8 @@ storage/transcripts/*
 storage/videos/*
 storage/jobs/*
 storage/cuts/*
+storage/subtitles/*
+storage/rendered/*
 
 # Preserve directory structure via .gitkeep files
 !storage/audio/.gitkeep
@@ -40,6 +42,8 @@ storage/cuts/*
 !storage/videos/.gitkeep
 !storage/jobs/.gitkeep
 !storage/cuts/.gitkeep
+!storage/subtitles/.gitkeep
+!storage/rendered/.gitkeep
 
 # ── IDE ───────────────────────────────────────────────────────────────────────
 .vscode/
